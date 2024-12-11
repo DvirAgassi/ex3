@@ -53,6 +53,12 @@ void add_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_
 
 int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
+BestBrand best_brand(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+
+BestType best_type(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+
+int sales_total(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+
 int next_available_day = 0;
 
 int main() {
@@ -71,6 +77,7 @@ int main() {
                 add_all(days, cube);
                 break;
             case stats:
+                get_stats(days, cube);
                 break;
             case print:
                 break;
