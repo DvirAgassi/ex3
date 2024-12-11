@@ -140,7 +140,7 @@ void add_one(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_
 
 void add_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
   int type_place = 0; // if you entered a brand it means you have a type as well, so just a random type to see if the place is not -1
-  while (added_all(days, cube)) {
+  while (!added_all(days, cube)) {
     printf("No data for brands ");
     for (int i = 0; i < NUM_OF_BRANDS; i++) {
       if (cube[next_available_day][i][type_place] == -1)
@@ -165,6 +165,8 @@ int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM
       all_added = 1;
     }
   }
+
+    return all_added;
 }
 
 void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
