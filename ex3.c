@@ -191,7 +191,7 @@ void get_stats(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     scanf("%d", &day);
     // check if the day is too low/high or invalid (has -1 inside)
     while (!(day > 0 && day <= 365) || cube[day-1][0][0] == -1) {
-        printf("Please enter a valid day.\nWhich day would you like to analyze?\n");
+        printf("Please enter a valid day.\nWhat day would you like to analyze?\n");
         scanf("%d", &day);
     }
     printf("In day number %d:\n", day);
