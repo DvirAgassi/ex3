@@ -244,11 +244,11 @@ void print_sales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     printf("*****************************************\n\n");
     for (int i = 0; i < NUM_OF_BRANDS; i++) {
         printf("Sales for %s:\n", brands[i]);
-        for (int j = 1; j <= next_available_day; j++) {
-            printf("Day %d- ", j);
+        for (int j = 0; j < next_available_day; j++) {
+            printf("Day %d- ", j+1);
             for (int k = 0; k < NUM_OF_TYPES; k++) {
                 printf("%s: ", types[k]);
-                printf("%d ", cube[i][j][k]);
+                printf("%d ", cube[j][i][k]);
             }
             printf("\n");
         }
