@@ -61,6 +61,8 @@ BestType best_type(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES])
 
 int sales_total(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
+void print_sales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+
 int next_available_day = 0;
 
 int main() {
@@ -82,6 +84,7 @@ int main() {
                 get_stats(days, cube);
                 break;
             case print:
+                print_sales(cube);
                 break;
             case insights:
                 break;
@@ -165,8 +168,8 @@ int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM
       all_added = 1;
     }
   }
-
-    return all_added;
+  
+  return all_added;
 }
 
 void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
@@ -181,9 +184,9 @@ void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NU
     int total = sales_total(day, cube);
     printf("The sales total was %d:\n", total);
     BestBrand b_b = best_brand(day, cube);
-    printf("The best sold brand with %d sales was %d\n", b_b.brand_sales, b_b.brand_num);
+    printf("The best sold brand with %d sales was %s\n", b_b.brand_sales, brands[b_b.brand_num]);
     BestType b_t = best_type(day, cube);
-    printf("The best sold type with %d sales was %d\n", b_t.type_sales, b_t.type_num);
+    printf("The best sold brand with %d sales was %s\n", b_t.type_sales, types[b_t.type_num]);
 }
 
 BestBrand best_brand(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
@@ -235,4 +238,20 @@ int sales_total(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     }
 
     return total;
+}
+
+void print_sales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    printf("*****************************************\n\n");
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        printf("Sales for %s:\n", brands[i]);
+        for (int j = 1; j <= next_available_day; j++) {
+            printf("Day %d- ", j);
+            for (int k = 0; k < NUM_OF_TYPES; k++) {
+                printf("%s: ", types[k]);
+                printf("%d ", cube[i][j][k]);
+            }
+            printf("\n");
+        }
+    }
+    printf("\n*****************************************\n");
 }
