@@ -47,13 +47,13 @@ void initialize_minus_one(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
 int max(int a, int b);
 
-void add_one(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+void add_one(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
-void add_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+void add_all(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
-int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+int added_all(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
-void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+void get_stats(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
 BestBrand best_brand(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
@@ -64,6 +64,8 @@ int sales_total(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 void print_sales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
 void give_insights(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+
+void check_deltas(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
 int next_available_day = 0;
 
@@ -77,13 +79,13 @@ int main() {
     while(choice != done){
         switch(choice){
             case addOne:
-                add_one(days, cube);
+                add_one(cube);
                 break;
             case addAll:
-                add_all(days, cube);
+                add_all(cube);
                 break;
             case stats:
-                get_stats(days, cube);
+                get_stats(cube);
                 break;
             case print:
                 print_sales(cube);
@@ -92,6 +94,7 @@ int main() {
                 give_insights(cube);
                 break;
             case deltas:
+                check_deltas(cube);
                 break;
             case done:
                 break;
@@ -121,7 +124,7 @@ int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-void add_one(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+void add_one(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     int brand_name;
     int types[NUM_OF_TYPES];
     int result = scanf("%d %d %d %d %d", &brand_name, &types[0], &types[1], &types[2], &types[3]);
@@ -138,16 +141,16 @@ void add_one(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_
       printf("This brand is not valid\n");
     }
     else {
-      days[brand_name] = next_available_day;
+      //days[brand_name] = next_available_day;
       for (int i = 0; i < NUM_OF_TYPES; i++) {
         cube[next_available_day][brand_name][i] = types[i];
       }
     }
 }
 
-void add_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+void add_all(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
   int type_place = 0; // if you entered a brand it means you have a type as well, so just a random type to see if the place is not -1
-  while (!added_all(days, cube)) {
+  while (!added_all(cube)) {
     printf("No data for brands ");
     for (int i = 0; i < NUM_OF_BRANDS; i++) {
       if (cube[next_available_day][i][type_place] == -1)
@@ -155,12 +158,12 @@ void add_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_
     }
     printf("\nPlease complete the data\n");
     
-    add_one(days, cube);
+    add_one(cube);
   }
   next_available_day++;
 }
 
-int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+int added_all(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
   // check if all the brands in next_available_day have info inside to see if you put everything already
   int all_added = 0;
   int type_place = 0; // if you entered a brand it means you have a type as well, so just a random type to see if the place is not -1
@@ -176,11 +179,12 @@ int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM
   return all_added;
 }
 
-void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+void get_stats(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     printf("What day would you like to analyze?");
     int day;
     scanf("%d", &day);
-    while (!(day >= 0 && day < 365)) {
+    // check if the day is too low/high or invalid (has -1 inside)
+    while (!(day >= 0 && day < 365) || cube[day][0][0] == -1) {
         printf("Please enter a valid day.\nWhich day would you like to analyze?\n");
         scanf("%d", &day);
     }
@@ -300,7 +304,43 @@ void give_insights(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
         }
     }
 
-    printf("The best-selling brand overall is %s: %d sales$\n", brands[best_brand], check_brands[best_brand]);
-    printf("The best-selling type of car is %s: %d sales$\n", types[best_type], check_types[best_type]);
-    printf("The most profitable day was day number %d: %d sales$\n", best_day, check_days[best_day]);
+    printf("The best-selling brand overall is %s: %d$\n", brands[best_brand], check_brands[best_brand]);
+    printf("The best-selling type of car is %s: %d$\n", types[best_type], check_types[best_type]);
+    printf("The most profitable day was day number %d: %d$\n", best_day + 1, check_days[best_day]);
+}
+
+void check_deltas(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    int check_brands[DAYS_IN_YEAR][NUM_OF_BRANDS] = {0};
+    int sum_change_brands[DAYS_IN_YEAR][NUM_OF_BRANDS] = {0};
+    float average_brand[NUM_OF_BRANDS] = {0};
+
+    // enter the check_brands the amount we got every day from each brand
+    for (int i = 0; i < next_available_day; i++) {
+        for (int j = 0; j < NUM_OF_BRANDS; j++) {
+            for (int k = 0; k < NUM_OF_TYPES; k++) {
+                if (cube[i][j][k] != -1) {
+                    check_brands[i][j] += cube[i][j][k];
+                }
+            }
+        }
+    }
+    
+    // enter the sum_brands the change we got every day between this day and the day after it
+    for (int i = 0; i < next_available_day - 1; i++) {
+        for (int j = 0; j < NUM_OF_BRANDS; j++) {
+            sum_change_brands[i][j] = check_brands[i + 1][j] - check_brands[i][j];
+        }
+    }
+    
+    // calculate the average
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        for (int j = 0; j < next_available_day - 1; j++) {
+            average_brand[i] += sum_change_brands[j][i];
+        }
+        average_brand[i] /= (next_available_day - 1);
+    }
+    
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        printf("Brand: %s, Average Delta: %f\n", brands[i], average_brand[i]);
+    }
 }
