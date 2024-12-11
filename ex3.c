@@ -1,6 +1,6 @@
 /******************
-Name:
-ID:
+Name: Dvir Agassi
+ID: 215786328
 Assignment: ex3
 *******************/
 
@@ -184,16 +184,16 @@ void get_stats(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     int day;
     scanf("%d", &day);
     // check if the day is too low/high or invalid (has -1 inside)
-    while (!(day >= 0 && day < 365) || cube[day][0][0] == -1) {
+    while (!(day > 0 && day <= 365) || cube[day-1][0][0] == -1) {
         printf("Please enter a valid day.\nWhich day would you like to analyze?\n");
         scanf("%d", &day);
     }
     printf("In day number %d:\n", day);
-    int total = sales_total(day, cube);
-    printf("The sales total was %d:\n", total);
-    BestBrand b_b = best_brand(day, cube);
+    int total = sales_total(day-1, cube);
+    printf("The sales total was %d\n", total);
+    BestBrand b_b = best_brand(day-1, cube);
     printf("The best sold brand with %d sales was %s\n", b_b.brand_sales, brands[b_b.brand_num]);
-    BestType b_t = best_type(day, cube);
+    BestType b_t = best_type(day-1, cube);
     printf("The best sold brand with %d sales was %s\n", b_t.type_sales, types[b_t.type_num]);
 }
 
