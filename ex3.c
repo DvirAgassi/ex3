@@ -180,7 +180,7 @@ void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NU
     printf("The sales total was %d:\n", total);
     BestBrand b_b = best_brand(day, cube);
     printf("The best sold brand with %d sales was %d\n", b_b.brand_sales, b_b.brand_num);
-    BestType b_t = best_brand(day, cube);
+    BestType b_t = best_type(day, cube);
     printf("The best sold brand with %d sales was %d\n", b_t.type_sales, b_t.type_num);
 }
 
