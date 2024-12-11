@@ -22,6 +22,15 @@ Assignment: ex3
 char brands[NUM_OF_BRANDS][BRANDS_NAMES] = {"Toyoga", "HyunNight", "Mazduh", "FolksVegan", "Key-Yuh"};
 char types[NUM_OF_TYPES][TYPES_NAMES] = {"SUV", "Sedan", "Coupe", "GT"};
 
+typedef struct BestBrand{
+    int brand_num;
+    int brand_sales;
+} BestBrand;
+
+typedef struct BestType{
+    int type_num;
+    int type_sales;
+} BestType;
 
 void printMenu(){
     printf("Welcome to the Cars Data Cube! What would you like to do?\n"
@@ -149,12 +158,70 @@ int added_all(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM
   }
 }
 
-void stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
-  printf("What day would you like to analyze?");
-  int day;
-  scanf("%d", &day);
-  while (!(day >= 0 && < 365)) {
-    printf("Please enter a valid day.\nWhich day would you like to analyze?\n");
-  }
+void get_stats(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    printf("What day would you like to analyze?");
+    int day;
+    scanf("%d", &day);
+    while (!(day >= 0 && day < 365)) {
+        printf("Please enter a valid day.\nWhich day would you like to analyze?\n");
+        scanf("%d", &day);
+    }
+    printf("In day number %d:\n", day);
+    int total = sales_total(day, cube);
+    printf("The sales total was %d:\n", total);
+    BestBrand b_b = best_brand(day, cube);
+    printf("The best sold brand with %d sales was %d\n", b_b.brand_sales, b_b.brand_num);
+    BestType b_t = best_brand(day, cube);
+    printf("The best sold brand with %d sales was %d\n", b_t.type_sales, b_t.type_num);
 }
 
+BestBrand best_brand(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    BestBrand b_b = {0, 0};
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        int count = 0;
+        for (int j = 0; j < NUM_OF_TYPES; j++) {
+            if (cube[day][i][j] != -1) {
+                count += cube[day][i][j];
+            }
+        }
+        if (count > b_b.brand_sales) {
+            b_b.brand_num = i;
+            b_b.brand_sales = count;      
+        }
+    }
+    return b_b;
+}
+
+BestType best_type(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    BestType b_t = {0, 0};
+    int types[NUM_OF_TYPES] = {0};
+
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        for (int j = 0; j < NUM_OF_TYPES; j++) {
+            if (cube[day][i][j] != -1) {
+                types[j] += cube[day][i][j];
+            }
+        }
+    }
+
+    for (int i = 0; i < NUM_OF_TYPES; i++) {
+        if (types[i] > b_t.type_sales) {
+            b_t.type_num = i;
+            b_t.type_sales = types[i];        
+        }
+    }
+
+    return b_t;
+}
+
+int sales_total(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    int total = 0;
+    
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        for (int j = 0; j < NUM_OF_TYPES; j++) {
+            total += cube[day][i][j];
+        }
+    }
+
+    return total;
+}
