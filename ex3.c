@@ -186,7 +186,7 @@ int added_all(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
 }
 
 void get_stats(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
-    printf("What day would you like to analyze?");
+    printf("What day would you like to analyze?\n");
     int day;
     scanf("%d", &day);
     // check if the day is too low/high or invalid (has -1 inside)
@@ -203,7 +203,7 @@ void get_stats(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
     printf("The best sold brand with %d sales was %s\n", b_b.brand_sales, brands[b_b.brand_num]);
     // get the best type (needs both the name and the amount so I made it a struct)
     BestType b_t = best_type(day-1, cube);
-    printf("The best sold brand with %d sales was %s\n", b_t.type_sales, types[b_t.type_num]);
+    printf("The best sold type with %d sales was %s\n", b_t.type_sales, types[b_t.type_num]);
 }
 
 BestBrand best_brand(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
