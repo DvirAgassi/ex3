@@ -63,6 +63,8 @@ int sales_total(int day, int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
 void print_sales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
 
+void give_insights(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]);
+
 int next_available_day = 0;
 
 int main() {
@@ -87,6 +89,7 @@ int main() {
                 print_sales(cube);
                 break;
             case insights:
+                give_insights(cube);
                 break;
             case deltas:
                 break;
@@ -125,7 +128,8 @@ void add_one(int days[NUM_OF_BRANDS], int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_
     while (result != 5 || (brand_name < 0 || brand_name > NUM_OF_BRANDS)) {
       while(getchar() != '\n');
       printf("This brand is not valid\n");
-      result = scanf("%d %d %d %d %d", &brand_name, &types[0], &types[1], &types[2], &types[3]);
+      break;
+      //result = scanf("%d %d %d %d %d", &brand_name, &types[0], &types[1], &types[2], &types[3]);
     }
     
     int type_place = 0; // if you entered a brand it means you have a type as well, so just a random type to see if the place is not -1
@@ -254,4 +258,49 @@ void print_sales(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
         }
     }
     printf("\n*****************************************\n");
+}
+
+void give_insights(int cube[DAYS_IN_YEAR][NUM_OF_BRANDS][NUM_OF_TYPES]) {
+    int check_brands[NUM_OF_BRANDS] = {0};
+    int check_types[NUM_OF_TYPES] = {0};
+    int check_days[DAYS_IN_YEAR] = {0};
+    int best_brand = 0, best_type = 0, best_day = 0;
+
+    // check every cell in the cube and enter the info into the arrays we created
+    for (int i = 0; i < next_available_day; i++) {
+        for (int j = 0; j < NUM_OF_BRANDS; j++) {
+            for (int k = 0; k < NUM_OF_TYPES; k++) {
+                if (cube[i][j][k] != -1) {
+                    check_brands[j] += cube[i][j][k];
+                    check_types[k] += cube[i][j][k];
+                    check_days[i] += cube[i][j][k];
+                }
+            }
+        }
+    }
+    
+    // find brand with most sales
+    for (int i = 0; i < NUM_OF_BRANDS; i++) {
+        if (check_brands[i] > check_brands[best_brand]) {
+            best_brand = i;
+        }
+    }
+    
+    // find type with most sales
+    for (int i = 0; i < NUM_OF_TYPES; i++) {
+        if (check_types[i] > check_types[best_type]) {
+            best_type = i;
+        }
+    }
+
+    // find day with most sales
+    for (int i = 0; i < next_available_day; i++) {
+        if (check_days[i] > check_days[best_day]) {
+            best_day = i;
+        }
+    }
+
+    printf("The best-selling brand overall is %s: %d sales$\n", brands[best_brand], check_brands[best_brand]);
+    printf("The best-selling type of car is %s: %d sales$\n", types[best_type], check_types[best_type]);
+    printf("The most profitable day was day number %d: %d sales$\n", best_day, check_days[best_day]);
 }
